@@ -10,8 +10,8 @@ import pygame
 # SETTINGS
 # =====================================================
 
-SERIAL_PORT = "COM7"       # CHANGE THIS
-BAUD_RATE = 9600
+SERIAL_PORT = "COM3"       # CHANGE THIS
+BAUD_RATE = 115200
 
 
 # =====================================================
@@ -53,6 +53,9 @@ go_away_messages = [
 
 distance = 999
 zone = 0
+joystick_x = 512
+joystick_y = 512
+joystick_button = 0
 
 violations = 0
 closest_distance = 999
@@ -61,6 +64,20 @@ social_battery = 100
 
 last_zone = -1
 last_audio_time = 0
+
+
+def get_zone(distance_cm):
+
+    if distance_cm > 100:
+        return 0
+
+    if distance_cm > 50:
+        return 1
+
+    if distance_cm > 20:
+        return 2
+
+    return 3
 
 
 # =====================================================
@@ -85,6 +102,9 @@ def read_arduino():
 
     global distance
     global zone
+    global joystick_x
+    global joystick_y
+    global joystick_button
     global violations
     global closest_distance
     global social_battery
@@ -115,22 +135,21 @@ def read_arduino():
 
             print(line)
 
-            # Example:
-            # DISTANCE:45.2,ZONE:2
-
-            if line.startswith("DISTANCE:"):
+            # Arduino format: DATA,distance_cm,x,y,button
+            if line.startswith("DATA,"):
 
                 try:
 
                     parts = line.split(",")
 
-                    distance = float(
-                        parts[0].split(":")[1]
-                    )
+                    if len(parts) != 5:
+                        raise ValueError("invalid DATA packet")
 
-                    zone = int(
-                        parts[1].split(":")[1]
-                    )
+                    distance = float(parts[1])
+                    joystick_x = int(parts[2])
+                    joystick_y = int(parts[3])
+                    joystick_button = int(parts[4])
+                    zone = get_zone(distance)
 
                     # Track closest distance
                     if distance < closest_distance:
