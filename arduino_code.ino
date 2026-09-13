@@ -55,6 +55,9 @@ const int RGB_RED_PIN = 10;
 const int RGB_GREEN_PIN = 11;
 const int RGB_BLUE_PIN = 3;
 
+// Set true if the LED's common pin connects to 5V instead of GND.
+const bool RGB_COMMON_ANODE = false;
+
 const int JOY_X = A0;
 const int JOY_Y = A1;
 
@@ -320,6 +323,14 @@ void setRgbColor(
   int blue
 ) {
 
+  if (RGB_COMMON_ANODE) {
+
+    red = 255 - red;
+    green = 255 - green;
+    blue = 255 - blue;
+
+  }
+
   analogWrite(RGB_RED_PIN, red);
   analogWrite(RGB_GREEN_PIN, green);
   analogWrite(RGB_BLUE_PIN, blue);
@@ -332,24 +343,28 @@ void updateRgbLed(float distance) {
   if (distance > 100.0) {
 
     setRgbColor(0, 255, 0);
+    Serial.println("RGB:GREEN");
 
   }
 
   else if (distance > 50.0) {
 
     setRgbColor(255, 180, 0);
+    Serial.println("RGB:YELLOW");
 
   }
 
   else if (distance > 20.0) {
 
     setRgbColor(255, 40, 0);
+    Serial.println("RGB:ORANGE");
 
   }
 
   else {
 
     setRgbColor(255, 0, 0);
+    Serial.println("RGB:RED");
 
   }
 
