@@ -692,6 +692,7 @@ let alarmLevel = 0;
 
 let violations = 0;
 let successes = 0;
+let consecutiveMistakes = 0;
 
 let closestDistance = 999;
 
@@ -701,6 +702,10 @@ let timerLoop = null;
 let currentDirection = "NONE";
 
 let lastDistance = 999;
+let lastDistanceZone = null;
+let vendavendaAudio = null;
+let getouthouseAudio = null;
+let nievideparipadiAudio = null;
 
 
 /* =========================================================
@@ -721,6 +726,85 @@ function initAudio() {
             )();
 
     }
+
+}
+
+
+function getDistanceZone(distance) {
+
+    if (distance > 100) return 0;
+
+    if (distance > 50) return 1;
+
+    if (distance > 20) return 2;
+
+    return 3;
+
+}
+
+
+function playVendavenda() {
+
+    if (!vendavendaAudio) {
+
+        vendavendaAudio =
+            new Audio("sounds/vendavenda.mp3");
+
+        vendavendaAudio.volume = 0.8;
+
+    }
+
+    vendavendaAudio.currentTime = 0;
+
+    vendavendaAudio.play().catch(() => {
+
+        log("Could not play sounds/vendavenda.mp3");
+
+    });
+
+}
+
+
+function playGetouthouse() {
+
+    if (!getouthouseAudio) {
+
+        getouthouseAudio =
+            new Audio("sounds/getouthouse.mp3");
+
+        getouthouseAudio.volume = 0.8;
+
+    }
+
+    getouthouseAudio.currentTime = 0;
+
+    getouthouseAudio.play().catch(() => {
+
+        log("Could not play sounds/getouthouse.mp3");
+
+    });
+
+}
+
+
+function playNievideparipadi() {
+
+    if (!nievideparipadiAudio) {
+
+        nievideparipadiAudio =
+            new Audio("sounds/nievideparipadi.mp3");
+
+        nievideparipadiAudio.volume = 0.8;
+
+    }
+
+    nievideparipadiAudio.currentTime = 0;
+
+    nievideparipadiAudio.play().catch(() => {
+
+        log("Could not play sounds/nievideparipadi.mp3");
+
+    });
 
 }
 
@@ -1030,6 +1114,28 @@ function updateDistance(distance) {
 
     if (isNaN(distance)) return;
 
+    const distanceZone =
+        getDistanceZone(distance);
+
+    if (
+        distanceZone === 1 &&
+        lastDistanceZone !== 1
+    ) {
+
+        playVendavenda();
+
+    }
+
+    if (
+        distanceZone === 3 &&
+        lastDistanceZone !== 3
+    ) {
+
+        playGetouthouse();
+
+    }
+
+    lastDistanceZone = distanceZone;
     lastDistance = distance;
 
     // Display distance
@@ -1230,6 +1336,7 @@ function updateJoystick(x, y) {
 function startGame() {
 
     gameActive = true;
+    consecutiveMistakes = 0;
 
     violations++;
 
@@ -1489,6 +1596,7 @@ function handleJoystickMove(direction) {
         direction === expected
     ) {
 
+        consecutiveMistakes = 0;
         successes++;
 
 
@@ -1599,6 +1707,14 @@ function roundSuccess() {
 ========================================================= */
 
 function wrongMove() {
+
+    consecutiveMistakes++;
+
+    if (consecutiveMistakes === 3) {
+
+        playNievideparipadi();
+
+    }
 
     alarmLevel =
         Math.min(
