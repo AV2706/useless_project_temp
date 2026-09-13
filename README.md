@@ -2,7 +2,7 @@
 
 
 
-# EDA MONE
+# PG NAME
 
 
 ## Basic Details
@@ -117,11 +117,21 @@ https://drive.google.com/file/d/1Kk0cS6gF6cYpLYAnyJ_DtCycNqC2V7ZD/view?usp=shari
 - Breadboard
 
 
-![Build](Add photos of build process here)
-*Explain the build steps*
+BUILD:
 
-![Final](Add photo of final product here)
-*Explain the final build*
+https://drive.google.com/file/d/1jYhTxi8LCW6jd78FHnsCWT5MU-diSsvD/view?usp=sharing
+https://drive.google.com/file/d/1uUCA53P7-1NxrSe88kuW4rMJ08tW6s42/view?usp=sharing
+https://drive.google.com/file/d/1jYhTxi8LCW6jd78FHnsCWT5MU-diSsvD/view?usp=sharing
+
+The components were connected to the Arduino according to the circuit design. The ultrasonic sensor was used to detect the distance, while the buzzer and speaker provided the audio responses. The joystick was integrated to control the mini-game, and the Arduino was programmed to connect all these functions into one working system.
+
+
+FINAL
+
+https://drive.google.com/file/d/1Kk0cS6gF6cYpLYAnyJ_DtCycNqC2V7ZD/view?usp=sharing
+
+The ultrasonic sensor continuously measures the distance between the device and the approaching person. Based on the detected distance, the Arduino triggers different audio warnings through the buzzer/speaker. As the person gets closer, the warnings become more noticeable. When the system reaches the final alert stage, the joystick-controlled mini-game is activated. The user must play and complete the game to stop the audio and reset the system. Once the person moves away and the conditions return to normal, the system is ready to detect the next approach.
+
 
 ### Project Demo
 # Video
@@ -132,9 +142,8 @@ https://drive.google.com/file/d/1Kk0cS6gF6cYpLYAnyJ_DtCycNqC2V7ZD/view?usp=shari
 [Add any extra demo materials/links]
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- ABHITHA ABHILASH: 
+- ANAINA VIBIN: 
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
