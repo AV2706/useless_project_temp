@@ -2,7 +2,7 @@
 
 
 
-# [Project Name] 🎯
+# EDA MONE
 
 
 ## Basic Details
@@ -65,10 +65,10 @@ For Hardware:
 For Software:
 
 # Installation
-[commands]
+[commands] 
 
 # Run
-[commands]
+[commands] 
 
 ### Project Documentation
 For Software:
@@ -85,11 +85,6 @@ For Software:
 
 # Diagrams
 
-*Workflow:*
-    https://drive.google.com/file/d/1Kvz9-FfMWnnXPn41Gz0i3yATkmZgLu30/view?usp=sharing
-
-The ultrasonic sensor detects the distance of an approaching person and sends the readings to the Arduino UNO. Based on the detected distance, the Arduino activates the buzzer and LED to provide different warning levels. At the same time, the Arduino communicates with a website running on the laptop, where the user is given a specific direction to move the joystick. The system checks the joystick input against the given command, allowing the warning response to be controlled through the interaction.
-
 For Hardware:
 
 # Schematic & Circuit
@@ -102,9 +97,25 @@ For Hardware:
 
 The schematic shows the connections between the Arduino UNO R4 WiFi and the main hardware components. The HC-SR04 ultrasonic sensor is connected to the Arduino’s digital pins D7 and D6 for distance measurement, while the joystick uses A0 and A1 for X–Y movement and D4 for its switch input. The buzzer is connected to D9 and GND to provide an audio warning. All components share the Arduino’s 5V and GND connections for power and a common reference.
 
+*Workflow:*
+    https://drive.google.com/file/d/1Kvz9-FfMWnnXPn41Gz0i3yATkmZgLu30/view?usp=sharing
+
+The ultrasonic sensor detects the distance of an approaching person and sends the readings to the Arduino UNO. Based on the detected distance, the Arduino activates the buzzer and LED to provide different warning levels. At the same time, the Arduino communicates with a website running on the laptop, where the user is given a specific direction to move the joystick. The system checks the joystick input against the given command, allowing the warning response to be controlled through the interaction.
+
 # Build Photos
-![Components](Add photo of your components here)
-*List out all components shown*
+
+COMPONENTS:
+
+https://drive.google.com/file/d/1Kk0cS6gF6cYpLYAnyJ_DtCycNqC2V7ZD/view?usp=sharing
+- Arduino UNO R4 WiFi Board
+- Ultrasonic Sensor
+- Joystick Module
+- RGB LED
+- Active Buzzer
+- Resistor
+- Jumper Wire
+- Breadboard
+
 
 ![Build](Add photos of build process here)
 *Explain the build steps*
