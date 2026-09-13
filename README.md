@@ -6,13 +6,12 @@
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: ENIGMA
 
 
 ### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Team Lead: ABHITHA ABHILASH - SCHOOL OF ENGINEERING, CUSAT
+- Member 2: ANAINA VIBIN - SCHOOL OF ENGINEERING, CUSAT
 
 ### Project Description
 [2-3 lines about what your project does]
