@@ -21,6 +21,12 @@
    + / SIG -> D9
    GND     -> GND
 
+  RGB LED (common cathode):
+  Red     -> D10 through 220 ohm resistor
+  Green   -> D11 through 220 ohm resistor
+  Blue    -> D3 through 220 ohm resistor
+  Cathode -> GND
+
    Serial:
    115200 baud
 
@@ -44,6 +50,10 @@ const int TRIG_PIN = 7;
 const int ECHO_PIN = 6;
 
 const int BUZZER_PIN = 9;
+
+const int RGB_RED_PIN = 10;
+const int RGB_GREEN_PIN = 11;
+const int RGB_BLUE_PIN = 3;
 
 const int JOY_X = A0;
 const int JOY_Y = A1;
@@ -93,9 +103,15 @@ void setup() {
 
   pinMode(BUZZER_PIN, OUTPUT);
 
+  pinMode(RGB_RED_PIN, OUTPUT);
+  pinMode(RGB_GREEN_PIN, OUTPUT);
+  pinMode(RGB_BLUE_PIN, OUTPUT);
+
   pinMode(JOY_BUTTON, INPUT_PULLUP);
 
   digitalWrite(TRIG_PIN, LOW);
+
+  updateRgbLed(distanceCM);
 
   // Seed random generator
   randomSeed(analogRead(A2));
@@ -291,6 +307,52 @@ float readDistance() {
   return readings[
     validReadings / 2
   ];
+}
+
+
+// ============================================================
+// RGB LED
+// ============================================================
+
+void setRgbColor(
+  int red,
+  int green,
+  int blue
+) {
+
+  analogWrite(RGB_RED_PIN, red);
+  analogWrite(RGB_GREEN_PIN, green);
+  analogWrite(RGB_BLUE_PIN, blue);
+
+}
+
+
+void updateRgbLed(float distance) {
+
+  if (distance > 100.0) {
+
+    setRgbColor(0, 255, 0);
+
+  }
+
+  else if (distance > 50.0) {
+
+    setRgbColor(255, 180, 0);
+
+  }
+
+  else if (distance > 20.0) {
+
+    setRgbColor(255, 40, 0);
+
+  }
+
+  else {
+
+    setRgbColor(255, 0, 0);
+
+  }
+
 }
 
 
@@ -576,6 +638,8 @@ void loop() {
 
     distanceCM =
         readDistance();
+
+    updateRgbLed(distanceCM);
 
 
     // Read joystick

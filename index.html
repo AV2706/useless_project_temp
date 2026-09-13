@@ -705,6 +705,7 @@ let lastDistance = 999;
 let lastDistanceZone = null;
 let vendavendaAudio = null;
 let getouthouseAudio = null;
+let edamoneAudio = null;
 let nievideparipadiAudio = null;
 
 
@@ -803,6 +804,34 @@ function playNievideparipadi() {
     nievideparipadiAudio.play().catch(() => {
 
         log("Could not play sounds/nievideparipadi.mp3");
+
+    });
+
+}
+
+
+function playMistakeAudioSequence() {
+
+    if (!edamoneAudio) {
+
+        edamoneAudio =
+            new Audio("sounds/edamone.mp3");
+
+        edamoneAudio.volume = 0.8;
+
+    }
+
+    edamoneAudio.onended = () => {
+
+        playNievideparipadi();
+
+    };
+
+    edamoneAudio.currentTime = 0;
+
+    edamoneAudio.play().catch(() => {
+
+        log("Could not play sounds/edamone.mp3");
 
     });
 
@@ -1712,7 +1741,7 @@ function wrongMove() {
 
     if (consecutiveMistakes === 3) {
 
-        playNievideparipadi();
+        playMistakeAudioSequence();
 
     }
 
