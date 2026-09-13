@@ -69,6 +69,7 @@ const int JOY_BUTTON = 4;
 // ============================================================
 
 const int NUM_DISTANCE_READINGS = 5;
+const float PERSONAL_SPACE_LIMIT_CM = 20.0;
 
 // Maximum time to wait for echo.
 // 30000 microseconds ≈ 5 meters.
@@ -100,6 +101,7 @@ unsigned long lastBuzzerUpdate = 0;
 void setup() {
 
   Serial.begin(115200);
+  Serial.setTimeout(50);
 
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
@@ -354,7 +356,7 @@ void updateRgbLed(float distance) {
 
   }
 
-  else if (distance > 20.0) {
+  else if (distance > PERSONAL_SPACE_LIMIT_CM) {
 
     setRgbColor(255, 40, 0);
     Serial.println("RGB:ORANGE");
@@ -599,6 +601,7 @@ void processCommand(
 
   }
 
+
 }
 
 
@@ -635,6 +638,12 @@ void loop() {
   // Check browser commands
 
   readSerialCommands();
+
+  // Stop the alarm when the USB serial connection is no longer active.
+  if (!Serial) {
+    alarmLevel = 0;
+    noTone(BUZZER_PIN);
+  }
 
 
   // Update sensors every 200 ms

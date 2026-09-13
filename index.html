@@ -7,7 +7,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>The Go-Away Machine™</title>
+<title>Poyi Pani Nokku</title>
 
 <style>
 
@@ -365,7 +365,7 @@ footer {
 <header>
 
     <div class="logo">
-        THE GO-AWAY MACHINE™
+        POYI PANI NOKKU
     </div>
 
     <div class="subtitle">
@@ -655,7 +655,7 @@ footer {
 
 <footer>
 
-    THE GO-AWAY MACHINE™
+    POYI PANI NOKKU
     <br>
     A completely unnecessary application of technology.
 
@@ -1063,6 +1063,8 @@ async function sendCommand(command) {
 ========================================================= */
 
 async function disconnectArduino() {
+
+    await sendCommand("ALARM:0");
 
     keepReading = false;
 
@@ -2302,7 +2304,7 @@ document.addEventListener(
 updateAlarmDisplay();
 
 log(
-    "GO-AWAY MACHINE INITIALIZED"
+    "POYI PANI NOKKU INITIALIZED"
 );
 
 log(
