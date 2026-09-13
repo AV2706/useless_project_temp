@@ -52,10 +52,15 @@ For Software:
 - [Tools used]
 
 For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
-
+- Arduino UNO R4 WiFi Board
+- Ultrasonic Sensor
+- Joystick Module
+- RGB LED
+- Active Buzzer
+- Resistor
+- Jumper Wire
+- Breadboard
+  
 ### Implementation
 For Software:
 # Installation
