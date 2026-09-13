@@ -96,8 +96,11 @@ For Hardware:
 ![Circuit](Add your circuit diagram here)
 *Add caption explaining connections*
 
-![Schematic](Add your schematic diagram here)
-*Add caption explaining the schematic*
+
+*Schematic Diagram*: 
+     https://drive.google.com/file/d/1WoCpQxfyuBmXq9MsLYIJtNRhqxrkRKkx/view?usp=sharing
+
+The schematic shows the connections between the Arduino UNO R4 WiFi and the main hardware components. The HC-SR04 ultrasonic sensor is connected to the Arduino’s digital pins D7 and D6 for distance measurement, while the joystick uses A0 and A1 for X–Y movement and D4 for its switch input. The buzzer is connected to D9 and GND to provide an audio warning. All components share the Arduino’s 5V and GND connections for power and a common reference.
 
 # Build Photos
 ![Components](Add photo of your components here)
