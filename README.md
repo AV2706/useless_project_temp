@@ -142,8 +142,9 @@ The ultrasonic sensor continuously measures the distance between the device and 
 [Add any extra demo materials/links]
 
 ## Team Contributions
-- ABHITHA ABHILASH: 
-- ANAINA VIBIN: 
+- ABHITHA ABHILASH: Contributed to the overall development and implementation of the project, including system integration, testing, and refinement. Worked on selecting and integrating the audio responses, developing the project concept and interaction flow, and preparing the documentation, README, and presentation materials.
+  
+- ANAINA VIBIN: Contributed to the overall development and implementation of the project, with a primary focus on the hardware and circuit setup. Designed and assembled the circuit, connected and tested the Arduino, ultrasonic sensor, buzzer/speaker, and joystick, and worked on integrating and debugging the system.
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
