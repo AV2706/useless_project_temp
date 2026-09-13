@@ -1,1 +1,2172 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>The Go-Away Machine™</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top, #222 0%, #090909 45%, #000 100%);
+    color: #f5f5f5;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+body.chaos {
+    animation: shake 0.12s infinite;
+}
+
+@keyframes shake {
+    0%   { transform: translate(0,0); }
+    25%  { transform: translate(2px,-2px); }
+    50%  { transform: translate(-2px,2px); }
+    75%  { transform: translate(2px,2px); }
+    100% { transform: translate(-2px,-2px); }
+}
+
+.container {
+    width: min(1200px, 94%);
+    margin: auto;
+    padding: 25px 0 50px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: -3px;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 1rem;
+    margin-top: 8px;
+}
+
+.tagline {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    color: #ff5555;
+    font-weight: bold;
+}
+
+/* CONNECT */
+
+.connect-area {
+    display: flex;
+    justify-content: center;
+    margin: 25px 0;
+}
+
+button {
+    border: none;
+    padding: 15px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.connect-btn {
+    background: #00ff88;
+    color: #000;
+}
+
+.disconnect-btn {
+    background: #ff4444;
+    color: white;
+    display: none;
+}
+
+/* STATUS */
+
+.status {
+    text-align: center;
+    padding: 14px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #111;
+    margin-bottom: 20px;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #555;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-dot.connected {
+    background: #00ff88;
+    box-shadow: 0 0 12px #00ff88;
+}
+
+/* GRID */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.card {
+    background: rgba(20,20,20,0.9);
+    border: 1px solid #292929;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.card-title {
+    color: #777;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.big-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+}
+
+.distance {
+    color: #00ff88;
+}
+
+.alarm {
+    color: #ff3333;
+}
+
+/* GAME */
+
+.game {
+    grid-column: 1 / -1;
+    min-height: 430px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-title {
+    font-size: 1rem;
+    color: #777;
+    letter-spacing: 3px;
+}
+
+.game-message {
+    margin-top: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.command {
+    font-size: clamp(4rem, 13vw, 9rem);
+    font-weight: 900;
+    margin: 25px 0 10px;
+    min-height: 150px;
+
+    text-shadow:
+        0 0 10px currentColor,
+        0 0 30px currentColor;
+}
+
+.UP {
+    color: #00ff88;
+}
+
+.DOWN {
+    color: #00aaff;
+}
+
+.LEFT {
+    color: #ffcc00;
+}
+
+.RIGHT {
+    color: #ff4477;
+}
+
+.timer-container {
+    width: 80%;
+    max-width: 700px;
+    height: 18px;
+    background: #222;
+    margin: 20px auto;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.timer-bar {
+    width: 100%;
+    height: 100%;
+    background: #00ff88;
+    transition: width 0.05s linear;
+}
+
+.sequence {
+    font-size: 1.2rem;
+    color: #777;
+    min-height: 30px;
+}
+
+.sequence span {
+    margin: 0 4px;
+}
+
+.sequence .done {
+    color: #00ff88;
+}
+
+.sequence .current {
+    color: white;
+    font-weight: bold;
+}
+
+/* ALERT */
+
+.alert {
+    grid-column: 1 / -1;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 900;
+    background: #111;
+    border: 2px solid #333;
+}
+
+.alert.danger {
+    border-color: #ff2222;
+    color: #ff3333;
+    animation: dangerPulse 0.5s infinite alternate;
+}
+
+@keyframes dangerPulse {
+    from {
+        box-shadow: 0 0 5px #ff2222;
+    }
+    to {
+        box-shadow: 0 0 35px #ff2222;
+    }
+}
+
+/* STATS */
+
+.stats {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 15px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* JOYSTICK */
+
+.joystick {
+    text-align: center;
+}
+
+.joystick-display {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    margin: 15px auto;
+    position: relative;
+    background: #080808;
+}
+
+.joystick-dot {
+    width: 25px;
+    height: 25px;
+    background: #00ff88;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px #00ff88;
+}
+
+/* LOG */
+
+.log {
+    height: 150px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.log div {
+    padding: 3px 0;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    color: #444;
+    margin-top: 35px;
+    font-size: 0.8rem;
+}
+
+@media(max-width: 800px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+    <div class="logo">
+        THE GO-AWAY MACHINE™
+    </div>
+
+    <div class="subtitle">
+        Advanced Personal Space Enforcement Technology
+    </div>
+
+    <div class="tagline">
+        "Because apparently, 'go away' needed technology."
+    </div>
+
+</header>
+
+
+<!-- CONNECTION -->
+
+<div class="connect-area">
+
+    <button
+        id="connectBtn"
+        class="connect-btn"
+        onclick="connectArduino()">
+
+        🔌 CONNECT ARDUINO
+
+    </button>
+
+    <button
+        id="disconnectBtn"
+        class="disconnect-btn"
+        onclick="disconnectArduino()">
+
+        DISCONNECT
+
+    </button>
+
+</div>
+
+
+<!-- STATUS -->
+
+<div class="status">
+
+    <span
+        id="statusDot"
+        class="status-dot">
+    </span>
+
+    <span id="connectionStatus">
+        Arduino not connected
+    </span>
+
+</div>
+
+
+<div class="dashboard">
+
+
+<!-- DISTANCE -->
+
+<div class="card">
+
+    <div class="card-title">
+        Personal Space
+    </div>
+
+    <div
+        id="distance"
+        class="big-value distance">
+
+        -- cm
+
+    </div>
+
+    <div id="distanceStatus">
+        Waiting...
+    </div>
+
+</div>
+
+
+<!-- ALARM -->
+
+<div class="card">
+
+    <div class="card-title">
+        Alarm Level
+    </div>
+
+    <div
+        id="alarm"
+        class="big-value alarm">
+
+        0 / 5
+
+    </div>
+
+    <div id="alarmText">
+        Peaceful
+    </div>
+
+</div>
+
+
+<!-- JOYSTICK -->
+
+<div class="card joystick">
+
+    <div class="card-title">
+        Joystick
+    </div>
+
+    <div id="joystickDirection">
+        CENTER
+    </div>
+
+    <div class="joystick-display">
+
+        <div
+            id="joystickDot"
+            class="joystick-dot">
+        </div>
+
+    </div>
+
+    <small>
+        X: <span id="joyX">512</span>
+        |
+        Y: <span id="joyY">512</span>
+    </small>
+
+</div>
+
+
+<!-- ALERT -->
+
+<div
+    id="alert"
+    class="alert">
+
+    😌 PERSONAL SPACE: ACCEPTABLE
+
+</div>
+
+
+<!-- GAME -->
+
+<div class="card game">
+
+    <div class="game-title">
+        EMERGENCY SOCIAL DISTANCING PROTOCOL
+    </div>
+
+    <div
+        id="gameMessage"
+        class="game-message">
+
+        Approach the machine to begin.
+    </div>
+
+    <div
+        id="command"
+        class="command">
+
+        💤
+
+    </div>
+
+    <div
+        id="sequence"
+        class="sequence">
+
+    </div>
+
+    <div class="timer-container">
+
+        <div
+            id="timerBar"
+            class="timer-bar">
+        </div>
+
+    </div>
+
+    <div>
+
+        Time:
+        <span id="timerText">
+            --
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="stats">
+
+    <div class="card stat">
+
+        <div class="card-title">
+            Violations
+        </div>
+
+        <div
+            id="violations"
+            class="stat-value">
+
+            0
+
+        </div>
+
+    </div>
+
+
+    <div class="card stat">
+
+        <div class="card-title">
+            Successful Moves
+        </div>
+
+        <div
+            id="successes"
+            class="stat-value">
+
+            0
+
+        </div>
+
+    </div>
+
+
+    <div class="card stat">
+
+        <div class="card-title">
+            Closest Approach
+        </div>
+
+        <div
+            id="closest"
+            class="stat-value">
+
+            --
+
+        </div>
+
+    </div>
+
+
+    <div class="card stat">
+
+        <div class="card-title">
+            Round
+        </div>
+
+        <div
+            id="round"
+            class="stat-value">
+
+            0
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- LOG -->
+
+<div class="card" style="grid-column:1/-1">
+
+    <div class="card-title">
+        SYSTEM LOG
+    </div>
+
+    <div
+        id="log"
+        class="log">
+
+    </div>
+
+</div>
+
+</div>
+
+
+<footer>
+
+    THE GO-AWAY MACHINE™
+    <br>
+    A completely unnecessary application of technology.
+
+</footer>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   WEB SERIAL
+========================================================= */
+
+let port = null;
+let reader = null;
+let writer = null;
+
+let keepReading = false;
+
+
+/* =========================================================
+   GAME VARIABLES
+========================================================= */
+
+let gameActive = false;
+
+let sequence = [];
+let sequenceIndex = 0;
+
+let gameRound = 0;
+
+let alarmLevel = 0;
+
+let violations = 0;
+let successes = 0;
+
+let closestDistance = 999;
+
+let commandDeadline = 0;
+let timerLoop = null;
+
+let currentDirection = "NONE";
+
+let lastDistance = 999;
+
+
+/* =========================================================
+   AUDIO
+========================================================= */
+
+let audioContext = null;
+
+
+function initAudio() {
+
+    if (!audioContext) {
+
+        audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+    }
+
+}
+
+
+/* =========================================================
+   LOG
+========================================================= */
+
+function log(message) {
+
+    const logBox =
+        document.getElementById("log");
+
+    const line =
+        document.createElement("div");
+
+    const time =
+        new Date().toLocaleTimeString();
+
+    line.textContent =
+        `[${time}] ${message}`;
+
+    logBox.prepend(line);
+
+}
+
+
+/* =========================================================
+   CONNECT ARDUINO
+========================================================= */
+
+async function connectArduino() {
+
+    initAudio();
+
+    if (!("serial" in navigator)) {
+
+        alert(
+            "Web Serial is not supported.\n\n" +
+            "Use Google Chrome or Microsoft Edge."
+        );
+
+        return;
+
+    }
+
+    try {
+
+        port =
+            await navigator.serial.requestPort();
+
+        await port.open({
+            baudRate: 115200
+        });
+
+        writer =
+            port.writable.getWriter();
+
+        keepReading = true;
+
+        document
+            .getElementById("connectBtn")
+            .style.display = "none";
+
+        document
+            .getElementById("disconnectBtn")
+            .style.display = "inline-block";
+
+        document
+            .getElementById("statusDot")
+            .classList.add("connected");
+
+        document
+            .getElementById("connectionStatus")
+            .textContent =
+            "Arduino connected";
+
+        log("ARDUINO CONNECTED");
+
+        readSerial();
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        log("Connection failed");
+
+    }
+
+}
+
+
+/* =========================================================
+   READ SERIAL
+========================================================= */
+
+async function readSerial() {
+
+    const decoder =
+        new TextDecoder();
+
+    let buffer = "";
+
+    try {
+
+        reader =
+            port.readable.getReader();
+
+        while (keepReading) {
+
+            const { value, done } =
+                await reader.read();
+
+            if (done) break;
+
+            buffer += decoder.decode(
+                value,
+                { stream: true }
+            );
+
+            let lines =
+                buffer.split("\n");
+
+            buffer =
+                lines.pop();
+
+            for (const line of lines) {
+
+                processSerialLine(
+                    line.trim()
+                );
+
+            }
+
+        }
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        log("Serial connection lost");
+
+    }
+
+}
+
+
+/* =========================================================
+   PROCESS ARDUINO DATA
+========================================================= */
+
+function processSerialLine(line) {
+
+    if (!line) return;
+
+
+    if (line.startsWith("DATA,")) {
+
+        const data =
+            line.split(",");
+
+        if (data.length >= 5) {
+
+            const distance =
+                parseFloat(data[1]);
+
+            const x =
+                parseInt(data[2]);
+
+            const y =
+                parseInt(data[3]);
+
+            const button =
+                parseInt(data[4]);
+
+
+            updateDistance(distance);
+
+            updateJoystick(x, y);
+
+        }
+
+    }
+
+    else {
+
+        log(line);
+
+    }
+
+}
+
+
+/* =========================================================
+   SEND COMMAND
+========================================================= */
+
+async function sendCommand(command) {
+
+    if (!writer) return;
+
+    try {
+
+        await writer.write(
+            new TextEncoder().encode(
+                command + "\n"
+            )
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   DISCONNECT
+========================================================= */
+
+async function disconnectArduino() {
+
+    keepReading = false;
+
+    try {
+
+        if (reader) {
+
+            await reader.cancel();
+
+            reader.releaseLock();
+
+        }
+
+    }
+
+    catch(e) {}
+
+
+    try {
+
+        if (writer) {
+
+            writer.releaseLock();
+
+        }
+
+    }
+
+    catch(e) {}
+
+
+    try {
+
+        if (port) {
+
+            await port.close();
+
+        }
+
+    }
+
+    catch(e) {}
+
+
+    port = null;
+    reader = null;
+    writer = null;
+
+
+    document
+        .getElementById("connectBtn")
+        .style.display = "inline-block";
+
+    document
+        .getElementById("disconnectBtn")
+        .style.display = "none";
+
+    document
+        .getElementById("statusDot")
+        .classList.remove("connected");
+
+    document
+        .getElementById("connectionStatus")
+        .textContent =
+        "Arduino not connected";
+
+    log("DISCONNECTED");
+
+}
+
+
+/* =========================================================
+   DISTANCE
+========================================================= */
+
+
+function updateDistance(distance) {
+
+    if (isNaN(distance)) return;
+
+    lastDistance = distance;
+
+    // Display distance
+    document
+        .getElementById("distance")
+        .textContent =
+        distance.toFixed(1) + " cm";
+
+
+    // Track closest approach
+    if (distance < closestDistance) {
+
+        closestDistance = distance;
+
+        document
+            .getElementById("closest")
+            .textContent =
+            distance.toFixed(1) + " cm";
+    }
+
+
+    const status =
+        document.getElementById(
+            "distanceStatus"
+        );
+
+    const alertBox =
+        document.getElementById("alert");
+
+
+    // =====================================================
+    // DISTANCE ZONES
+    // =====================================================
+
+    if (distance > 100) {
+
+        status.textContent =
+            "CHILL 😌";
+
+        alertBox.className =
+            "alert";
+
+        alertBox.textContent =
+            "😌 PERSONAL SPACE: ACCEPTABLE";
+    }
+
+
+    else if (distance > 50) {
+
+        status.textContent =
+            "Getting closer...";
+
+        alertBox.className =
+            "alert";
+
+        alertBox.textContent =
+            "👀 YOU ARE APPROACHING";
+    }
+
+
+    else if (distance > 20) {
+
+        status.textContent =
+            "BRO. SERIOUSLY?";
+
+        alertBox.className =
+            "alert danger";
+
+        alertBox.textContent =
+            "⚠️ PERSONAL SPACE WARNING";
+    }
+
+
+    else {
+
+        status.textContent =
+            "PERSONAL SPACE VIOLATION";
+
+        alertBox.className =
+            "alert danger";
+
+        alertBox.textContent =
+            "🚨 PERSONAL SPACE VIOLATION 🚨";
+
+
+        // Start the game only once
+        if (!gameActive) {
+
+            startGame();
+
+        }
+
+    }
+}
+
+/* =========================================================
+   JOYSTICK
+========================================================= */
+
+const DEADZONE = 180;
+
+
+function getDirection(x, y) {
+
+    if (x > 512 + DEADZONE)
+        return "RIGHT";
+
+    if (x < 512 - DEADZONE)
+        return "LEFT";
+
+    if (y > 512 + DEADZONE)
+        return "UP";
+
+    if (y < 512 - DEADZONE)
+        return "DOWN";
+
+    return "NONE";
+
+}
+
+
+function updateJoystick(x, y) {
+
+    document
+        .getElementById("joyX")
+        .textContent = x;
+
+    document
+        .getElementById("joyY")
+        .textContent = y;
+
+
+    const direction =
+        getDirection(x, y);
+
+
+    currentDirection =
+        direction;
+
+
+    document
+        .getElementById("joystickDirection")
+        .textContent =
+        direction;
+
+
+    const dot =
+        document.getElementById(
+            "joystickDot"
+        );
+
+
+    let dx =
+        ((x - 512) / 512) * 60;
+
+    let dy =
+        ((y - 512) / 512) * 60;
+
+
+    dx =
+        Math.max(
+            -60,
+            Math.min(60, dx)
+        );
+
+    dy =
+        Math.max(
+            -60,
+            Math.min(60, dy)
+        );
+
+
+    dot.style.left =
+        `calc(50% + ${dx}px)`;
+
+    dot.style.top =
+        `calc(50% + ${dy}px)`;
+
+
+    if (
+        gameActive &&
+        direction !== "NONE"
+    ) {
+
+        handleJoystickMove(
+            direction
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GAME START
+========================================================= */
+
+function startGame() {
+
+    gameActive = true;
+
+    violations++;
+
+    document
+        .getElementById("violations")
+        .textContent =
+        violations;
+
+
+    gameRound = 0;
+
+    alarmLevel = 1;
+
+    sendCommand(
+        "ALARM:1"
+    );
+
+
+    document
+        .getElementById("gameMessage")
+        .textContent =
+        "🚨 ESCAPE PROTOCOL ACTIVATED";
+
+
+    log(
+        "PERSONAL SPACE VIOLATION DETECTED"
+    );
+
+
+    funnyNoise(1);
+
+    nextRound();
+
+}
+
+
+/* =========================================================
+   NEXT ROUND
+========================================================= */
+
+function nextRound() {
+
+    gameRound++;
+
+    document
+        .getElementById("round")
+        .textContent =
+        gameRound;
+
+
+    const length =
+        Math.min(
+            1 +
+            Math.floor(gameRound / 2),
+            7
+        );
+
+
+    sequence = [];
+
+
+    const directions = [
+        "UP",
+        "DOWN",
+        "LEFT",
+        "RIGHT"
+    ];
+
+
+    for (
+        let i = 0;
+        i < length;
+        i++
+    ) {
+
+        sequence.push(
+            directions[
+                Math.floor(
+                    Math.random() *
+                    directions.length
+                )
+            ]
+        );
+
+    }
+
+
+    sequenceIndex = 0;
+
+
+    /*
+       Difficulty gets progressively worse.
+    */
+
+    const time =
+        Math.max(
+            450,
+            1500 -
+            gameRound * 80
+        );
+
+
+    commandDeadline =
+        Date.now() + time;
+
+
+    alarmLevel =
+        Math.min(
+            5,
+            1 +
+            Math.floor(
+                gameRound / 2
+            )
+        );
+
+
+    sendCommand(
+        "ALARM:" + alarmLevel
+    );
+
+
+    updateAlarmDisplay();
+
+
+    showCurrentCommand();
+
+
+    startTimer(time);
+
+}
+
+
+/* =========================================================
+   SHOW COMMAND
+========================================================= */
+
+function showCurrentCommand() {
+
+    const command =
+        sequence[sequenceIndex];
+
+
+    const commandBox =
+        document.getElementById(
+            "command"
+        );
+
+
+    commandBox.textContent =
+        getArrow(command);
+
+
+    commandBox.className =
+        "command " + command;
+
+
+    let html = "";
+
+
+    sequence.forEach(
+        (direction, index) => {
+
+            let className = "";
+
+
+            if (
+                index <
+                sequenceIndex
+            ) {
+
+                className =
+                    "done";
+
+            }
+
+            else if (
+                index ===
+                sequenceIndex
+            ) {
+
+                className =
+                    "current";
+
+            }
+
+
+            html +=
+                `<span class="${className}">
+                    ${getArrow(direction)}
+                 </span>`;
+
+        }
+    );
+
+
+    document
+        .getElementById("sequence")
+        .innerHTML =
+        html;
+
+}
+
+
+function getArrow(direction) {
+
+    const arrows = {
+
+        UP: "⬆️",
+
+        DOWN: "⬇️",
+
+        LEFT: "⬅️",
+
+        RIGHT: "➡️"
+
+    };
+
+
+    return arrows[direction];
+
+}
+
+
+/* =========================================================
+   JOYSTICK MOVE
+========================================================= */
+
+function handleJoystickMove(direction) {
+
+    if (!gameActive) return;
+
+
+    /*
+       Prevent holding one direction
+       from repeatedly counting.
+    */
+
+    if (
+        handleJoystickMove.lastDirection ===
+        direction
+    ) {
+
+        return;
+
+    }
+
+
+    handleJoystickMove.lastDirection =
+        direction;
+
+
+    const expected =
+        sequence[sequenceIndex];
+
+
+    if (
+        direction === expected
+    ) {
+
+        successes++;
+
+
+        document
+            .getElementById("successes")
+            .textContent =
+            successes;
+
+
+        sequenceIndex++;
+
+
+        funnySuccess();
+
+
+        if (
+            sequenceIndex >=
+            sequence.length
+        ) {
+
+            roundSuccess();
+
+        }
+
+        else {
+
+            showCurrentCommand();
+
+        }
+
+    }
+
+    else {
+
+        wrongMove();
+
+    }
+
+}
+
+
+/* Reset joystick repeat protection */
+
+setInterval(
+    () => {
+
+        if (
+            currentDirection ===
+            "NONE"
+        ) {
+
+            handleJoystickMove.lastDirection =
+                "NONE";
+
+        }
+
+    },
+    100
+);
+
+
+/* =========================================================
+   ROUND SUCCESS
+========================================================= */
+
+function roundSuccess() {
+
+    clearInterval(timerLoop);
+
+    log(
+        "CORRECT SEQUENCE"
+    );
+
+
+    document
+        .getElementById("gameMessage")
+        .textContent =
+        "GOOD. NOW DO IT FASTER.";
+
+
+    funnySuccess();
+
+
+    /*
+       Eventually fake an escape,
+       then reveal the joke.
+    */
+
+    if (gameRound >= 7) {
+
+        fakeEscape();
+
+        return;
+
+    }
+
+
+    setTimeout(
+        nextRound,
+        350
+    );
+
+}
+
+
+/* =========================================================
+   WRONG MOVE
+========================================================= */
+
+function wrongMove() {
+
+    alarmLevel =
+        Math.min(
+            5,
+            alarmLevel + 1
+        );
+
+
+    sendCommand(
+        "ALARM:" + alarmLevel
+    );
+
+
+    updateAlarmDisplay();
+
+
+    document
+        .getElementById("gameMessage")
+        .textContent =
+        "❌ WRONG. THE MACHINE DISAPPROVES.";
+
+
+    log(
+        "INCORRECT MOVEMENT"
+    );
+
+
+    funnyNoise(
+        alarmLevel
+    );
+
+
+    document.body.classList.add(
+        "chaos"
+    );
+
+
+    setTimeout(
+        () => {
+
+            document.body.classList.remove(
+                "chaos"
+            );
+
+        },
+        500
+    );
+
+
+    resetSequence();
+
+}
+
+
+/* =========================================================
+   TIMEOUT
+========================================================= */
+
+function timeout() {
+
+    clearInterval(timerLoop);
+
+
+    alarmLevel =
+        Math.min(
+            5,
+            alarmLevel + 1
+        );
+
+
+    sendCommand(
+        "ALARM:" + alarmLevel
+    );
+
+
+    updateAlarmDisplay();
+
+
+    document
+        .getElementById("gameMessage")
+        .textContent =
+        "⏰ TOO SLOW. INTROVERT DISAPPOINTED.";
+
+
+    log(
+        "COMMAND TIMEOUT"
+    );
+
+
+    funnyNoise(
+        alarmLevel
+    );
+
+
+    resetSequence();
+
+}
+
+
+/* =========================================================
+   RESET SEQUENCE
+========================================================= */
+
+function resetSequence() {
+
+    sequenceIndex = 0;
+
+
+    setTimeout(
+        () => {
+
+            nextRound();
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function startTimer(duration) {
+
+    clearInterval(timerLoop);
+
+
+    const start =
+        Date.now();
+
+
+    timerLoop =
+        setInterval(
+            () => {
+
+                const elapsed =
+                    Date.now() -
+                    start;
+
+
+                const remaining =
+                    Math.max(
+                        0,
+                        duration -
+                        elapsed
+                    );
+
+
+                const percent =
+                    (
+                        remaining /
+                        duration
+                    ) * 100;
+
+
+                document
+                    .getElementById(
+                        "timerBar"
+                    )
+                    .style.width =
+                    percent + "%";
+
+
+                document
+                    .getElementById(
+                        "timerText"
+                    )
+                    .textContent =
+                    (
+                        remaining /
+                        1000
+                    ).toFixed(2) +
+                    " s";
+
+
+                if (
+                    remaining <= 0
+                ) {
+
+                    clearInterval(
+                        timerLoop
+                    );
+
+                    timeout();
+
+                }
+
+            },
+            30
+        );
+
+}
+
+
+/* =========================================================
+   ALARM DISPLAY
+========================================================= */
+
+function updateAlarmDisplay() {
+
+    document
+        .getElementById("alarm")
+        .textContent =
+        alarmLevel +
+        " / 5";
+
+
+    const texts = [
+
+        "Peaceful",
+
+        "Mild annoyance",
+
+        "Getting concerned",
+
+        "EXTREMELY UNCOMFORTABLE",
+
+        "SOCIAL PANIC",
+
+        "ABSOLUTELY NOT"
+
+    ];
+
+
+    document
+        .getElementById("alarmText")
+        .textContent =
+        texts[alarmLevel];
+
+}
+
+
+/* =========================================================
+   FAKE ESCAPE
+========================================================= */
+
+function fakeEscape() {
+
+    gameActive = false;
+
+    clearInterval(timerLoop);
+
+
+    sendCommand(
+        "ALARM:0"
+    );
+
+
+    document
+        .getElementById("command")
+        .textContent =
+        "✓";
+
+
+    document
+        .getElementById("command")
+        .className =
+        "command UP";
+
+
+    document
+        .getElementById("gameMessage")
+        .textContent =
+        "ESCAPE SUCCESS";
+
+
+    log(
+        "ESCAPE SUCCESS"
+    );
+
+
+    setTimeout(
+        () => {
+
+            document
+                .getElementById("gameMessage")
+                .textContent =
+                "SYSTEM ERROR";
+
+
+            document
+                .getElementById("command")
+                .textContent =
+                "💀";
+
+
+            funnyNoise(5);
+
+
+        },
+        1200
+    );
+
+
+    setTimeout(
+        () => {
+
+            document
+                .getElementById("gameMessage")
+                .textContent =
+                "YOU WERE STILL TOO CLOSE.";
+
+
+        },
+        2300
+    );
+
+
+    setTimeout(
+        () => {
+
+            document
+                .getElementById("gameMessage")
+                .textContent =
+                "RESTARTING ESCAPE PROTOCOL...";
+
+
+            if (
+                lastDistance <
+                20
+            ) {
+
+                startGame();
+
+            }
+
+        },
+        3500
+    );
+
+}
+
+
+/* =========================================================
+   BROWSER SOUND
+========================================================= */
+
+function playTone(
+    frequency,
+    duration,
+    type = "square",
+    volume = 0.05
+) {
+
+    if (!audioContext)
+        return;
+
+
+    const oscillator =
+        audioContext.createOscillator();
+
+
+    const gain =
+        audioContext.createGain();
+
+
+    oscillator.type =
+        type;
+
+
+    oscillator.frequency.value =
+        frequency;
+
+
+    gain.gain.value =
+        volume;
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    oscillator.start();
+
+
+    oscillator.stop(
+        audioContext.currentTime +
+        duration
+    );
+
+}
+
+
+/* =========================================================
+   FUNNY FAILURE SOUND
+========================================================= */
+
+function funnyNoise(level) {
+
+    initAudio();
+
+
+    const sounds = [
+
+        [120, 0.12],
+
+        [300, 0.08],
+
+        [80, 0.15],
+
+        [700, 0.05],
+
+        [180, 0.18],
+
+        [50, 0.25]
+
+    ];
+
+
+    const count =
+        Math.min(
+            sounds.length,
+            2 + level
+        );
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const [
+            frequency,
+            duration
+        ] =
+        sounds[
+            Math.floor(
+                Math.random() *
+                sounds.length
+            )
+        ];
+
+
+        setTimeout(
+            () => {
+
+                playTone(
+                    frequency,
+                    duration,
+                    "sawtooth",
+                    0.08
+                );
+
+            },
+            i * 70
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SUCCESS SOUND
+========================================================= */
+
+function funnySuccess() {
+
+    initAudio();
+
+
+    playTone(
+        500,
+        0.08,
+        "square",
+        0.04
+    );
+
+
+    setTimeout(
+        () => {
+
+            playTone(
+                800,
+                0.1,
+                "square",
+                0.04
+            );
+
+        },
+        80
+    );
+
+}
+
+
+/* =========================================================
+   KEYBOARD TESTING
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        let direction =
+            null;
+
+
+        if (
+            event.key ===
+            "ArrowUp"
+        )
+            direction = "UP";
+
+
+        if (
+            event.key ===
+            "ArrowDown"
+        )
+            direction = "DOWN";
+
+
+        if (
+            event.key ===
+            "ArrowLeft"
+        )
+            direction = "LEFT";
+
+
+        if (
+            event.key ===
+            "ArrowRight"
+        )
+            direction = "RIGHT";
+
+
+        if (direction) {
+
+            event.preventDefault();
+
+            handleJoystickMove(
+                direction
+            );
+
+            log(
+                "KEYBOARD TEST: " +
+                direction
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+updateAlarmDisplay();
+
+log(
+    "GO-AWAY MACHINE INITIALIZED"
+);
+
+log(
+    "Waiting for Arduino..."
+);
+
+</script>
+
+</body>
+</html>
+```
 
