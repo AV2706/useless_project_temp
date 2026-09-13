@@ -83,8 +83,9 @@ For Software:
 *Add caption explaining what this shows*
 
 # Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
+https://drive.google.com/file/d/1Kvz9-FfMWnnXPn41Gz0i3yATkmZgLu30/view?usp=sharing
+
+The ultrasonic sensor detects the distance of an approaching person and sends the readings to the Arduino UNO. Based on the detected distance, the Arduino activates the buzzer and LED to provide different warning levels. At the same time, the Arduino communicates with a website running on the laptop, where the user is given a specific direction to move the joystick. The system checks the joystick input against the given command, allowing the warning response to be controlled through the interaction.
 
 For Hardware:
 
