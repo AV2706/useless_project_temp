@@ -14,13 +14,34 @@
 - Member 2: ANAINA VIBIN - SCHOOL OF ENGINEERING, CUSAT
 
 ### Project Description
-[2-3 lines about what your project does]
+A sensor-based personal space alarm that detects proximity and escalates from polite warnings to a full dramatic meltdown as someone gets too close. The ironic twist: the louder and more theatrical the alarm gets trying to keep people away, the more attention it actually attracts — making it the exact opposite of what it was built for.
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
+Somewhere right now, an introvert is trying to enjoy some peace and personal space.
+
+But then someone gets too close.
+
+They don't want to start a conversation. They don't want to awkwardly ask the person to move. They just want them to stay out of their personal space.
+
+A completely unnecessary problem, obviously. You could simply move away or say “excuse me.”
+
+But where's the technology in that?
 
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
+We built a device that detects when someone enters an introvert's personal space and immediately triggers an alarm to warn them to back off.
+
+There's just one tiny flaw:
+
+The alarm attracts everyone's attention.
+
+So instead of quietly avoiding social interaction, the introvert now has a loud device announcing:
+
+“PLEASE STAY AWAY FROM ME.”
+
+A problem that could have been solved by simply moving two steps away — now requires a sensor, a microcontroller, an alarm, and unnecessary amounts of engineering.
+
+Useless? Absolutely.
+Did we build it anyway? Of course.
 
 ## Technical Details
 ### Technologies/Components Used
