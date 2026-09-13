@@ -362,11 +362,6 @@ void updateBuzzer() {
   }
 
 
-  unsigned long now =
-      millis();
-
-
-  int interval;
   int frequency;
 
 
@@ -374,7 +369,6 @@ void updateBuzzer() {
 
     case 1:
 
-      interval = 1000;
       frequency = 700;
 
       break;
@@ -382,7 +376,6 @@ void updateBuzzer() {
 
     case 2:
 
-      interval = 650;
       frequency = 1000;
 
       break;
@@ -390,7 +383,6 @@ void updateBuzzer() {
 
     case 3:
 
-      interval = 400;
       frequency = 1300;
 
       break;
@@ -398,7 +390,6 @@ void updateBuzzer() {
 
     case 4:
 
-      interval = 220;
       frequency = 1700;
 
       break;
@@ -406,7 +397,6 @@ void updateBuzzer() {
 
     case 5:
 
-      interval = 100;
       frequency = 2200;
 
       break;
@@ -414,30 +404,14 @@ void updateBuzzer() {
 
     default:
 
-      interval = 1000;
       frequency = 700;
 
       break;
 
   }
 
-
-  if (
-    now - lastBuzzerUpdate
-    >= interval
-  ) {
-
-    lastBuzzerUpdate =
-        now;
-
-
-    tone(
-      BUZZER_PIN,
-      frequency,
-      100
-    );
-
-  }
+  // Keep the buzzer sounding continuously while an alarm is active.
+  tone(BUZZER_PIN, frequency);
 
 }
 
